@@ -3,6 +3,7 @@ from faker import Faker
 import random
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 from DB.models import Base, User
 
@@ -47,7 +48,38 @@ def main() -> None:
     df = generate_dirty_data()
 
     # 4. Zapis danych i wrzucenie ich do tabeli "users"
-    df.to_sql('users', con=engine, if_exists='append', index=False)
+    #df.to_sql('users', con=engine, if_exists='append', index=False)
+
+    df = df.drop_duplicates(subset=['full_name', 'email', 'age'])
+
+    with Session(engine) as session:
+        for index, row in df.iterrows():
+            try:
+                existing = session.scalar(
+                select(User).where(
+                    User.full_name == row['full_name'],
+                    User.email == row['email'],
+                    User.age == row['age']
+                )
+            )
+
+                if existing:
+                    print(f"Odrzucono rekord {index}: duplikat full_name")
+                    continue
+                new_user = User(
+                    full_name=row['full_name'],
+                    email=row['email'],
+                    age=row['age'],
+                    account_balance=row['account_balance']
+                )
+                session.add(new_user)
+                session.commit()
+            except ValueError as e:
+                print(f"Odrzucono rekord {index}: {e}")
+                session.rollback() 
+            except (ValueError, IntegrityError) as e:
+                print(f"Odrzucono rekord {index}: {e}")
+                session.rollback()
 
     # 5. Test odczytu poprzez SQLAlchemy
     with Session(engine) as session:
