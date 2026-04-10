@@ -1,7 +1,7 @@
 // ── Variables ───────────────────────────────────────────────
 #let title = [When Migration Changes Your Data]
 #let subtitle = [Six Incidents, Ten Failure Modes, and What They Share]
-#let author = [Engineering Research Report]
+#let author = [Hubert Dec, Patryk Dziki, Adrian Czapka, Dominik Dziedzic, Beniamin Sujka]
 #let institution = [Data Quality in Database Migrations]
 #let city = [April 2026]
 
