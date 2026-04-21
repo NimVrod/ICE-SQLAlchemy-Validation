@@ -9,5 +9,6 @@ dependencies = [
     "pytest==9.0.2",
     "pandas==3.0.2",
     "psycopg2==2.9.11",
-    "faker"
+    "faker",
+    "pytest-cov==7.1.0",
 ]

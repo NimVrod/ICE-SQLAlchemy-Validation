@@ -1,5 +1,5 @@
 ﻿from sqlalchemy import event
-from Models import User
+from ValidationExamples.Models import User
 
 @event.listens_for(User, "before_insert")
 def validate_user(mapper, connection, target):

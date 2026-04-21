@@ -1,6 +1,6 @@
 ﻿from Database import engine, Session
 from Models import Base, User
-import Validators
+import Models
 import Events
 
 Base.metadata.create_all(engine)
