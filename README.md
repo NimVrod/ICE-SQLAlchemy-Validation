@@ -31,12 +31,14 @@ pytest
 ```
 Tests are located in the `Tests` directory.
 
-## Slides (Typst)
+## Slides (PowerPoint)
 
-Landscape deck in `WriteUps/ice-sqlalchemy-validation-slides.typ` (companion to `WriteUps/Error_refrences_SprintI/migration-data-quality-report.typ`):
+Deck: `WriteUps/ice-sqlalchemy-validation-slides.pptx` (companion to `WriteUps/Error_refrences_SprintI/migration-data-quality-report.typ`).
+
+Regenerate from Python:
 
 ```bash
-typst compile WriteUps/ice-sqlalchemy-validation-slides.typ
+uv run --with python-pptx python WriteUps/build_slides_pptx.py
 ```
 
 ## Migration validation library

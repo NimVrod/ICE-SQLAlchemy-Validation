@@ -23,6 +23,9 @@ notebook = [
     "jupyter>=1.0.0",
     "ipykernel>=6.29.0",
 ]
+slides = [
+    "python-pptx>=1.0.0",
+]
 
 [project.entry-points.pytest11]
 ice_sqlalchemy_validation = "src.pytest_validation_plugin"
