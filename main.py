@@ -5,6 +5,8 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session
 
 from DB.models import Base, User
+from src.engine import MigrationValidator
+from src.pandas_ import errors_to_dataframe
 
 def generate_dirty_data():
     fake = Faker()
@@ -59,6 +61,15 @@ def main() -> None:
         print("Pierwsze 50 z nich:")
         for i in range(50):
             print(f"ID: {rows[i].id} | Imię: {rows[i].full_name}| Email: {rows[i].email} | Wiek: {rows[i].age} | Stan konta: {rows[i].account_balance}")
+
+        validator = MigrationValidator(session)
+        errors = validator.validate(User)
+        report = errors_to_dataframe(errors)
+        print("\nRaport walidacji migracyjnej (pierwsze 20):")
+        if report.empty:
+            print("Brak wykrytych błędów")
+        else:
+            print(report.head(20).to_string(index=False))
 
 
 if __name__ == "__main__":
