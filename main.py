@@ -19,7 +19,7 @@ def generate_dirty_data():
 
     df = pd.DataFrame(data)
 
-    print("Wprowadzanie 'błędów' ")
+    print("Introducing 'errors' ")
 
     # 1. Puste maile (wartości NULL), w 50 losowych miejscach
     null_indices = random.sample(range(1000), 50)
@@ -35,6 +35,55 @@ def generate_dirty_data():
 
     return df
 
+
+def generate_html_report(validation_log, passed_count, failed_count):
+    # 1. Create pandas summary DataFrame
+    report_df = pd.DataFrame(validation_log)
+
+    # Export to Jupyter notebook (Tworzy plik CSV, który wczytamy w notatniku)
+    report_df.to_csv("validation_results.csv", index=False)
+
+    # Add pass/fail metrics
+    total_records = passed_count + failed_count
+    pass_rate = (passed_count / total_records) * 100 if total_records > 0 else 0
+    failed_df = report_df[report_df['Status'] == 'FAIL']
+
+    # 2. Generate HTML report
+    html_content = f"""
+    <html>
+    <head>
+        <title>Data Validation Report</title>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 40px; }}
+            h1 {{ color: #2C3E50; }}
+            .metrics {{ background-color: #ecf0f1; padding: 20px; border-radius: 8px; width: 300px; }}
+            .pass {{ color: #27ae60; font-weight: bold; }}
+            .fail {{ color: #e74c3c; font-weight: bold; }}
+            table {{ border-collapse: collapse; width: 100%; margin-top: 20px; }}
+            th, td {{ text-align: left; padding: 8px; border: 1px solid #ddd; }}
+            th {{ background-color: #2C3E50; color: white; }}
+            tr:nth-child(even) {{background-color: #f2f2f2;}}
+        </style>
+    </head>
+    <body>
+        <h1>Data Migration and Validation Report</h1>
+        <div class="metrics">
+            <h3>Summary (Metrics)</h3>
+            <p>Scanned records: <b>{total_records}</b></p>
+            <p class="pass">Validated (PASS): {passed_count}</p>
+            <p class="fail">Rejected (FAIL): {failed_count}</p>
+            <p>Success rate: <b>{pass_rate:.2f}%</b></p>
+        </div>
+        <h3>Details of rejected records:</h3>
+        {failed_df.to_html(index=False, classes="table")}
+    </body>
+    </html>
+    """
+    with open("validation_report.html", "w", encoding="utf-8") as f:
+        f.write(html_content)
+    print("\nCOMPLETED")
+    print("Generated 'validation_report.html' (HTML Raport) and 'validation_results.csv' (For Jupyter)")
+
 def main() -> None:
     # 1. Baza danych jako plik w folderze projektu
     engine = create_engine("sqlite+pysqlite:///dirty_database.db", echo=False)
@@ -46,19 +95,67 @@ def main() -> None:
     # 3. Wygenerowanie "brudnej" bazy danych
     df = generate_dirty_data()
 
-    # 4. Zapis danych i wrzucenie ich do tabeli "users"
-    df.to_sql('users', con=engine, if_exists='append', index=False)
+    # Zmienne do logowania sukcesów i porażek
+    validation_log = []
+    passed_count = 0
+    failed_count = 0
+
+    print("\nStarting record validation...")
 
     # 5. Test odczytu poprzez SQLAlchemy
     with Session(engine) as session:
-        # session.add(TestModel(name="Alice"))
-        # session.commit()
+        # Przechodzimy przez każdy wygenerowany wiersz
+        for index, row in df.iterrows():
+            errors = []
 
-        rows = session.scalars(select(User)).all()
-        print(f"\nW bazie znajduje się {len(rows)} rekordów")
-        print("Pierwsze 50 z nich:")
-        for i in range(50):
-            print(f"ID: {rows[i].id} | Imię: {rows[i].full_name}| Email: {rows[i].email} | Wiek: {rows[i].age} | Stan konta: {rows[i].account_balance}")
+            if pd.isna(row['email']):
+                errors.append("No email (NULL)")
+
+            if row['age'] < 0:
+                errors.append("Negative age")
+
+            # Sprawdzanie duplikatów
+            existing = session.scalar(
+                select(User).where(
+                    User.full_name == row['full_name'],
+                    User.email == row['email']
+                )
+            )
+            if existing:
+                errors.append("Duplicate in the database")
+
+            # Jeśli zebraliśmy jakieś błędy, logujemy porażkę
+            if errors:
+                validation_log.append({
+                    "Row ID": index,
+                    "Status": "FAIL",
+                    "Name and surname": row['full_name'],
+                    "Email": row['email'],
+                    "Reason for rejection": ", ".join(errors)
+                })
+                failed_count += 1
+            else:
+                # Jeśli przeszło walidację, dodajemy do bazy i logujemy sukces
+                new_user = User(
+                    full_name=row['full_name'],
+                    email=row['email'],
+                    age=row['age'],
+                    account_balance=row['account_balance']
+                )
+                session.add(new_user)
+                session.commit()
+
+                validation_log.append({
+                    "Row ID": index,
+                    "Status": "PASS",
+                    "Name and surname": row['full_name'],
+                    "Email": row['email'],
+                    "Reason for rejection": "-"
+                })
+                passed_count += 1
+
+        # Na sam koniec generujemy podsumowanie z zebranych logów
+        generate_html_report(validation_log, passed_count, failed_count)
 
 
 if __name__ == "__main__":
