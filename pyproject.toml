@@ -11,4 +11,6 @@ dependencies = [
     "psycopg2==2.9.11",
     "faker",
     "pytest-cov==7.1.0",
+    "pandas-stubs==3.0.0.260204",
+    "notebook>=7.5.6",
 ]
