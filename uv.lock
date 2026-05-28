@@ -172,7 +172,6 @@ requires-dist = [
     { name = "faker" },
     { name = "pandas", specifier = "==3.0.2" },
     { name = "psycopg2", specifier = "==2.9.11" },
-    { name = "pytest" },
     { name = "pytest", specifier = "==9.0.2" },
     { name = "pytest-cov", specifier = "==7.1.0" },
     { name = "sqlalchemy", specifier = "==2.0.48" },
