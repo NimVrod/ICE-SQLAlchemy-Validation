@@ -36,7 +36,8 @@ def test_crud_operations(db):
     is_deleted = delete_user(db, user.id)
     assert is_deleted is True
     assert get_user(db, user.id) is None
-
+    is_deleted_fake = delete_user(db, 9999)
+    assert is_deleted_fake is False
 def test_1000_row_performance(db):
     start_time = time.time()
 
@@ -54,7 +55,7 @@ def test_1000_row_performance(db):
     db.commit()
     
     duration = time.time() - start_time
-    
+    print(f"\n---> ZAPIS 1000 REKORDÓW ZAJĄŁ: {duration:.4f} sekundy <---")
     count = db.execute(select(func.count(User.id))).scalar()
     assert count == 1000
     assert duration < 1.0 
