@@ -13,7 +13,6 @@ class MaxFloatValidator:
     max_val: float
     epsilon: float
     kind: Literal["float_max"] = "float_max"
-    requires_python: bool = False
 
     def build_sql_condition(self, column: ColumnElement[Any]) -> ColumnElement[bool]:
         threshold = self.max_val + self.epsilon

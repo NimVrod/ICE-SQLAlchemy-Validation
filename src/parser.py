@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from types import NoneType, UnionType
-from typing import Annotated, Any, Union, get_args, get_origin, get_type_hints
+from types import NoneType
+from typing import Annotated, Any, get_args, get_origin, get_type_hints
 
 from sqlalchemy.orm import InstrumentedAttribute, Mapped
 
@@ -29,11 +29,6 @@ class FieldRuleSet:
 
 
 def _is_optional(tp: Any) -> bool:
-    origin = get_origin(tp)
-    if origin is None:
-        return False
-    if origin in (UnionType, Union):
-        return NoneType in get_args(tp)
     return NoneType in get_args(tp)
 
 
@@ -41,8 +36,6 @@ def _unwrap_mapped(tp: Any) -> Any:
     origin = get_origin(tp)
     args = get_args(tp)
     if origin is Mapped and args:
-        return args[0]
-    if args and getattr(origin, "__name__", "") == "Mapped":
         return args[0]
     return tp
 
@@ -62,13 +55,15 @@ def _normalize_field_type(field_type: Any) -> tuple[Any, tuple[Any, ...]]:
     return _split_annotated(inner)
 
 
-def _resolve_field_type(model_cls: type[Any], field_name: str, field_type: Any) -> Any:
-    if isinstance(field_type, str):
-        resolved = get_type_hints(model_cls, include_extras=True).get(field_name)
-        if resolved is None:
-            return field_type
-        return resolved
-    return field_type
+def _resolved_annotations(model_cls: type[Any]) -> dict[str, Any]:
+    hints = get_type_hints(model_cls, include_extras=True)
+    resolved: dict[str, Any] = {}
+    for field_name, field_type in getattr(model_cls, "__annotations__", {}).items():
+        if isinstance(field_type, str):
+            resolved[field_name] = hints.get(field_name, field_type)
+        else:
+            resolved[field_name] = field_type
+    return resolved
 
 
 def _should_require_non_null(base_type: Any, metadata: tuple[Any, ...]) -> bool:
@@ -120,15 +115,19 @@ def parse_field_validators(
     if not isinstance(attr, InstrumentedAttribute):
         return []
 
-    field_type = _resolve_field_type(model_cls, field_name, field_type)
-    base_type, metadata = _normalize_field_type(field_type)
+    resolved_type = _resolved_annotations(model_cls).get(field_name, field_type)
+    base_type, metadata = _normalize_field_type(resolved_type)
     return _field_validators_from_metadata(field_name, base_type, metadata)
 
 
 def parse_field_rules(model_cls: type[Any]) -> list[FieldRuleSet]:
     rules: list[FieldRuleSet] = []
-    for field_name, field_type in getattr(model_cls, "__annotations__", {}).items():
-        validators = parse_field_validators(model_cls, field_name, field_type)
+    for field_name, field_type in _resolved_annotations(model_cls).items():
+        attr = getattr(model_cls, field_name, None)
+        if not isinstance(attr, InstrumentedAttribute):
+            continue
+        base_type, metadata = _normalize_field_type(field_type)
+        validators = _field_validators_from_metadata(field_name, base_type, metadata)
         if validators:
             rules.append(FieldRuleSet(field_name=field_name, validators=tuple(validators)))
     return rules
@@ -137,8 +136,7 @@ def parse_field_rules(model_cls: type[Any]) -> list[FieldRuleSet]:
 def parse_duplicate_validators(model_cls: type[Any]) -> list[DuplicateValidator]:
     targets: set[tuple[str, ...]] = set()
 
-    for field_name, field_type in getattr(model_cls, "__annotations__", {}).items():
-        field_type = _resolve_field_type(model_cls, field_name, field_type)
+    for field_name, field_type in _resolved_annotations(model_cls).items():
         _, metadata = _normalize_field_type(field_type)
         for meta in metadata:
             if isinstance(meta, Unique):

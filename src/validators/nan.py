@@ -11,7 +11,6 @@ from sqlalchemy.sql.elements import ColumnElement
 class NaNValidator:
     field_name: str
     kind: Literal["nan"] = "nan"
-    requires_python: bool = True
 
     def build_sql_condition(self, column: ColumnElement[Any]) -> ColumnElement[bool]:
         # Portable prefilter: fetch populated values, confirm NaN in Python.

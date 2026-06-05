@@ -9,7 +9,6 @@ class DuplicateValidator:
     field_name: str
     columns: tuple[str, ...]
     kind: Literal["duplicate"] = "duplicate"
-    requires_python: bool = False
 
     def build_sql_condition(self, column: Any) -> Any:
         del column

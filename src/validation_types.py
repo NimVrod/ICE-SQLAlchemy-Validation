@@ -25,7 +25,6 @@ ModelT = TypeVar("ModelT", bound=DeclarativeBase)
 class BaseValidator(Protocol):
     kind: ValidatorKind
     field_name: str
-    requires_python: bool
 
     def build_sql_condition(self, column: ColumnElement[Any]) -> ColumnElement[bool]:
         """Return a SQL condition that identifies invalid rows."""

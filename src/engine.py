@@ -119,6 +119,3 @@ class MigrationValidator:
         if isinstance(value, (int, str)):
             return value
         return str(value)
-
-
-UltimateScaleMigrationValidator = MigrationValidator

@@ -10,7 +10,6 @@ from sqlalchemy.sql.elements import ColumnElement
 class NullValidator:
     field_name: str
     kind: Literal["null"] = "null"
-    requires_python: bool = False
 
     def build_sql_condition(self, column: ColumnElement[Any]) -> ColumnElement[bool]:
         return cast(ColumnElement[bool], column.is_(None))

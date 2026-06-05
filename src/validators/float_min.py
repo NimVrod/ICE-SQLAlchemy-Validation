@@ -13,7 +13,6 @@ class MinFloatValidator:
     min_val: float
     epsilon: float
     kind: Literal["float_min"] = "float_min"
-    requires_python: bool = False
 
     def build_sql_condition(self, column: ColumnElement[Any]) -> ColumnElement[bool]:
         threshold = self.min_val - self.epsilon

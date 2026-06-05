@@ -1,4 +1,4 @@
-from src.engine import MigrationValidator, UltimateScaleMigrationValidator
+from src.engine import MigrationValidator
 from src.metadata import (
     FloatMax,
     FloatMin,
@@ -19,7 +19,6 @@ from src.validators.null import NullValidator
 
 __all__ = [
     "MigrationValidator",
-    "UltimateScaleMigrationValidator",
     "ValidationError",
     "FieldRuleSet",
     "parse_field_rules",
