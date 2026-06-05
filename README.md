@@ -25,21 +25,23 @@ uv run jupyter notebook examples/validation_report.ipynb
 
 The notebook loads Faker dirty data, runs the validator, and displays `report_df` / `summary_df` inline.
 
+### Validation dashboard (Streamlit)
+
+Live view of validation errors with auto-refresh and a configurable database connection (defaults to `dirty_database.db`):
+
+```bash
+uv sync --extra dashboard
+uv run python examples/validate_dirty_database.py   # seed the default DB if needed
+uv run streamlit run dashboard/app.py
+```
+
+In the sidebar you can paste a SQLAlchemy URL (for example `postgresql+psycopg2://user:pass@host/db`) or a SQLite file path.
+
 ## Running tests
 ```shell
 pytest
 ```
 Tests are located in the `Tests` directory.
-
-## Slides (PowerPoint)
-
-Deck: `WriteUps/ice-sqlalchemy-validation-slides.pptx` (companion to `WriteUps/Error_refrences_SprintI/migration-data-quality-report.typ`).
-
-Regenerate from Python:
-
-```bash
-uv run --with python-pptx python WriteUps/build_slides_pptx.py
-```
 
 ## Migration validation library
 
