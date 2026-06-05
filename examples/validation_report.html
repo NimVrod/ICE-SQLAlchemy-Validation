@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Migration validation report</title>
+  <style>
+body { font-family: system-ui, sans-serif; margin: 2rem; color: #1a1a1a; }
+h1 { margin-bottom: 0.25rem; }
+.meta { color: #555; margin-bottom: 1.5rem; }
+.status-passed { color: #0a7a2f; font-weight: 600; }
+.status-failed { color: #b42318; font-weight: 600; }
+section { margin-bottom: 2rem; }
+h2 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+table.data-table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+table.data-table th, table.data-table td {
+  border: 1px solid #d0d7de;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+table.data-table th { background: #f6f8fa; }
+table.data-table tbody tr:nth-child(even) { background: #fafbfc; }
+.success { color: #0a7a2f; font-weight: 600; }
+</style>
+</head>
+<body>
+  <h1>Migration validation report</h1>
+  <p class="meta">
+    Status: <span class="status-failed">FAILED</span> |
+    Total errors: 37
+  </p>
+  <section>
+  <h2>Summary</h2>
+  <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>table</th>
+      <th>field</th>
+      <th>validator</th>
+      <th>count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>users</td>
+      <td>email</td>
+      <td>duplicate</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>email</td>
+      <td>null</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>age</td>
+      <td>float_min</td>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+  <section>
+  <h2>Details</h2>
+  <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>table</th>
+      <th>id</th>
+      <th>field</th>
+      <th>error</th>
+      <th>validator</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>users</td>
+      <td>39</td>
+      <td>email</td>
+      <td>Field 'email' must not be NULL</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>69</td>
+      <td>email</td>
+      <td>Field 'email' must not be NULL</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>87</td>
+      <td>email</td>
+      <td>Field 'email' must not be NULL</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>95</td>
+      <td>email</td>
+      <td>Field 'email' must not be NULL</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>106</td>
+      <td>email</td>
+      <td>Field 'email' must not be NULL</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>123</td>
+      <td>email</td>
+      <td>Field 'email' must not be NULL</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>140</td>
+      <td>email</td>
+      <td>Field 'email' must not be NULL</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>142</td>
+      <td>email</td>
+      <td>Field 'email' must not be NULL</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>162</td>
+      <td>email</td>
+      <td>Field 'email' must not be NULL</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>189</td>
+      <td>email</td>
+      <td>Field 'email' must not be NULL</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>19</td>
+      <td>age</td>
+      <td>Field 'age' must be &gt;= 0 (epsilon=0.0), got -15</td>
+      <td>float_min</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>77</td>
+      <td>age</td>
+      <td>Field 'age' must be &gt;= 0 (epsilon=0.0), got -15</td>
+      <td>float_min</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>94</td>
+      <td>age</td>
+      <td>Field 'age' must be &gt;= 0 (epsilon=0.0), got -15</td>
+      <td>float_min</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>143</td>
+      <td>age</td>
+      <td>Field 'age' must be &gt;= 0 (epsilon=0.0), got -15</td>
+      <td>float_min</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>175</td>
+      <td>age</td>
+      <td>Field 'age' must be &gt;= 0 (epsilon=0.0), got -15</td>
+      <td>float_min</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>205</td>
+      <td>age</td>
+      <td>Field 'age' must be &gt;= 0 (epsilon=0.0), got -15</td>
+      <td>float_min</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>210</td>
+      <td>age</td>
+      <td>Field 'age' must be &gt;= 0 (epsilon=0.0), got -15</td>
+      <td>float_min</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>4</td>
+      <td>email</td>
+      <td>Duplicate value 'tmurray@example.com' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>14</td>
+      <td>email</td>
+      <td>Duplicate value 'tiffanybuck@example.com' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>19</td>
+      <td>email</td>
+      <td>Duplicate value 'brandy25@example.net' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>36</td>
+      <td>email</td>
+      <td>Duplicate value 'hwillis@example.com' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>49</td>
+      <td>email</td>
+      <td>Duplicate value 'annettecook@example.org' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>54</td>
+      <td>email</td>
+      <td>Duplicate value 'markgonzalez@example.org' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>78</td>
+      <td>email</td>
+      <td>Duplicate value 'gatesdana@example.net' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>80</td>
+      <td>email</td>
+      <td>Duplicate value 'powellrichard@example.org' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>94</td>
+      <td>email</td>
+      <td>Duplicate value 'sarahgarcia@example.net' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>163</td>
+      <td>email</td>
+      <td>Duplicate value 'wmcpherson@example.net' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>201</td>
+      <td>email</td>
+      <td>Duplicate value 'tmurray@example.com' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>202</td>
+      <td>email</td>
+      <td>Duplicate value 'wmcpherson@example.net' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>203</td>
+      <td>email</td>
+      <td>Duplicate value 'gatesdana@example.net' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>204</td>
+      <td>email</td>
+      <td>Duplicate value 'annettecook@example.org' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>205</td>
+      <td>email</td>
+      <td>Duplicate value 'brandy25@example.net' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>206</td>
+      <td>email</td>
+      <td>Duplicate value 'hwillis@example.com' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>207</td>
+      <td>email</td>
+      <td>Duplicate value 'powellrichard@example.org' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>208</td>
+      <td>email</td>
+      <td>Duplicate value 'markgonzalez@example.org' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>209</td>
+      <td>email</td>
+      <td>Duplicate value 'tiffanybuck@example.com' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+    <tr>
+      <td>users</td>
+      <td>210</td>
+      <td>email</td>
+      <td>Duplicate value 'sarahgarcia@example.net' for unique field 'email'</td>
+      <td>duplicate</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+</body>
+</html>

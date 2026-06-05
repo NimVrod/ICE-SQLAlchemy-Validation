@@ -8,7 +8,7 @@ from src.metadata import (
     Unique,
     UniqueComposite,
 )
-from src.pandas_ import errors_to_dataframe, summarize_errors
+from src.pandas_ import errors_to_dataframe, errors_to_html, summarize_errors, write_errors_html
 from src.parser import FieldRuleSet, parse_duplicate_validators, parse_field_rules
 from src.validation_types import ValidationError
 from src.validators.duplicate import DuplicateValidator
@@ -36,5 +36,7 @@ __all__ = [
     "MaxFloatValidator",
     "DuplicateValidator",
     "errors_to_dataframe",
+    "errors_to_html",
     "summarize_errors",
+    "write_errors_html",
 ]
