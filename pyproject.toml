@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "ice-sqlalchemy-validation"
 version = "0.1.0"
@@ -11,4 +15,21 @@ dependencies = [
     "psycopg2==2.9.11",
     "faker",
     "pytest-cov==7.1.0",
+    "ipykernel>=7.2.0",
+    "pandas-stubs~=3.0.2",
 ]
+
+[project.optional-dependencies]
+notebook = [
+    "jupyter>=1.0.0",
+    "ipykernel>=6.29.0",
+]
+slides = [
+    "python-pptx>=1.0.0",
+]
+
+[project.entry-points.pytest11]
+ice_sqlalchemy_validation = "src.pytest_validation_plugin"
+
+[tool.hatch.build.targets.wheel]
+only-include = ["src"]
