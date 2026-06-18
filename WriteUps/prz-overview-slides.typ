@@ -154,9 +154,6 @@
       // centre — title block
       block(width: 100%, height: 100%, inset: (left: PAD, right: PAD))[
         #align(horizon)[
-          #text(size: 11pt, tracking: 1.4pt, fill: C_FAINT)[
-            #upper[Faculty of Electrical and Computer Engineering]
-          ]
           #v(0.9em)
           #text(size: 40pt, weight: "bold", fill: NAVY)[
             SQLAlchemy Validation
@@ -180,7 +177,7 @@
         #grid(
           columns: (1fr, 1fr),
           align: (left + horizon, right + horizon),
-          text(size: 11.5pt, fill: C_FAINT)[Sprint I · Data Quality in Database Migrations],
+          text(size: 11.5pt, fill: C_FAINT)[Ideas and Computer engineering],
           text(size: 13pt, weight: "bold", fill: NAVY, tracking: 0.4pt)[WE BUILD THE FUTURE!],
         )
       ],
